@@ -6,7 +6,7 @@ const validation = require('../validation/validate')
 const createShortUrl = async function (req, res) {
     try {
         let url = req.body.longUrl
-        if (!validation.isValid(url)) return res.status(400).send({ status: false, msg: 'url cannot be empty' })
+        if (!validation.isValidField(url)) return res.status(400).send({ status: false, msg: 'url cannot be empty' })
         if (!validUrl.isUri(url.toString())) {
             return res.status(400).send({ status: false, msg: "enter valid url" })
         }
@@ -35,7 +35,7 @@ const getUrl = async function (req, res) {
     try {
 
         let reqParams = req.params.urlCode
-        if(!validation.isValid(reqParams)) return res.status(400).send({ status: false, msg: 'Url code cannot be blank' }) 
+        if(!shortId.isValid(reqParams)) return res.status(400).send({ status: false, msg: 'invalid url code' }) 
         let findUrlCode = await urlModel.findOne({ urlCode: reqParams }).select({ longUrl: 1, _id: 0 })
         if(findUrlCode == null) return res.status(400).send({ status: false, msg: 'Url not found' })
         return res.status(302).redirect( findUrlCode.longUrl )
