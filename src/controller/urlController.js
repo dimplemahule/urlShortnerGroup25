@@ -38,7 +38,7 @@ const getUrl = async function (req, res) {
         if(!validation.isValid(reqParams)) return res.status(400).send({ status: false, msg: 'Url code cannot be blank' }) 
         let findUrlCode = await urlModel.findOne({ urlCode: reqParams }).select({ longUrl: 1, _id: 0 })
         if(findUrlCode == null) return res.status(400).send({ status: false, msg: 'Url not found' })
-        return res.status(302).send({ status: true, data: findUrlCode })
+        return res.status(302).redirect( findUrlCode.longUrl )
     }
     catch (error) {
         res.status(500).send({ msg: error.message })
