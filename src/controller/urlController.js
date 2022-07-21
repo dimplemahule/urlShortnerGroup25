@@ -62,8 +62,8 @@ const getUrl = async function (req, res) {
         
         if(!shortId.isValid(reqParams)) return res.status(400).send({ status: false, msg: 'invalid url code' }) 
         let findUrlCode = await urlModel.findOne({ urlCode: reqParams }).select({ longUrl: 1, _id: 0 })
-        if(findUrlCode == null) return res.status(400).send({ status: false, msg: 'Url not found' })
-        await SET_ASYNC(`${reqParams}`, JSON.stringify(findUrlCode.longUrl))
+        if(findUrlCode == null) return res.status(404).send({ status: false, msg: 'Url not found' })
+        await SET_ASYNC(`${reqParams}`, findUrlCode.longUrl)
         return res.status(302).redirect( findUrlCode.longUrl )
         }
     }
